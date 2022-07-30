@@ -1,6 +1,7 @@
 package com.udacity.asteroidradar.repository
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
@@ -16,6 +17,7 @@ import org.json.JSONObject
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+const val TAG = "AsteroidRepository"
 class AsteroidRepository(private val database:AsteroidDatabase) {
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -40,8 +42,13 @@ class AsteroidRepository(private val database:AsteroidDatabase) {
 
     suspend fun refreshAsteroids(){
         withContext(Dispatchers.IO){
-            val asteroids = NetworkUtils.parseAsteroidsJsonResult(JSONObject(AsteroidAPI.retrofitService.getAsteroids()))
-            database.asteroidDao.insertAsteroids(* asteroids.asDatabaseModel())
+            try{
+                val asteroids = NetworkUtils.parseAsteroidsJsonResult(JSONObject(AsteroidAPI.retrofitService.getAsteroids()))
+                database.asteroidDao.insertAsteroids(* asteroids.asDatabaseModel())
+            }catch (exception:Exception){
+                Log.e(TAG,"Unable to fetch the asteroids list")
+            }
+
         }
 
     }

@@ -1,27 +1,32 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs'
-apply plugin: 'kotlin-android-extensions'
+
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "29.0.3"
+    compileSdkVersion 32
     defaultConfig {
         applicationId "com.udacity.asteroidradar"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 32
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        debug{
+            buildConfigField "String","API_KEY","\"ix0YEJjyegCmQpyZ310xZTV7fI4tlA9fDJYp6cAH\""
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String","API_KEY","\"ix0YEJjyegCmQpyZ310xZTV7fI4tlA9fDJYp6cAH\""
         }
+
     }
+
     buildFeatures {
         dataBinding true
     }

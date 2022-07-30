@@ -2,6 +2,7 @@ package com.udacity.asteroidradar.main
 
 import android.app.Application
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.*
 import com.udacity.asteroidradar.Asteroid
@@ -11,6 +12,8 @@ import com.udacity.asteroidradar.database.getDatabaseInstance
 import com.udacity.asteroidradar.repository.AsteroidRepository
 import kotlinx.coroutines.launch
 
+
+const val TAG = "MainViewModel"
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _picOfday = MutableLiveData<PictureOfDay>()
@@ -41,8 +44,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun getImageOfDay(){
        viewModelScope.launch {
-           val pictureOfDay = AsteroidAPI.retrofitService.getImageOfTheDay()
-           _picOfday.value = pictureOfDay
+           try {
+               val pictureOfDay = AsteroidAPI.retrofitService.getImageOfTheDay()
+               _picOfday.value = pictureOfDay
+           }catch (exception:Exception){
+               Log.e(TAG,"Unable to get fetch the Picture of the Day")
+           }
        }
     }
 
